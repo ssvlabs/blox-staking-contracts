@@ -1,7 +1,11 @@
 {
   "manifestVersion": "2.2",
-  "contracts": {},
-  "dependencies": {},
+  "contracts": {
+    "BloxStaking": "BloxStaking"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts-ethereum-package": "^3.0.0"
+  },
   "name": "blox-staking-contracts",
   "version": "0.0.1",
   "compiler": {
@@ -15,7 +19,7 @@
       "enabled": false
     },
     "manager": "openzeppelin",
-    "solcVersion": "0.5.17",
+    "solcVersion": "0.6.2",
     "artifactsDir": "build/contracts",
     "contractsDir": "contracts"
   },

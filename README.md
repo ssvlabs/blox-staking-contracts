@@ -9,13 +9,21 @@
 
 </div>
 
+## Dependencies
+```bash
+brew install node@12
+npm install -g solc 
+npm install -g truffle 
+```
+
+
 ## Compile
 First, clone the repo via git and install dependencies:
 
 ```bash
 git clone https://github.com/bloxapp/blox-staking-contracts
 cd blox-staking-contracts
-npx oz compile
+npx oz compile --solc-version 0.6.2 
 ```
 ## Local test network
 ```bash
