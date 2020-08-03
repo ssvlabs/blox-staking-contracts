@@ -6,9 +6,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "engines": {
+    "node": "<14.0.0"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@openzeppelin/cli": "^2.8.2"
+    "@openzeppelin/cli": "^2.8.2",
+    "ganache-cli": "^6.9.1"
   }
 }
