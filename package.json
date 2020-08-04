@@ -12,9 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@openzeppelin/cli": "^2.8.2",
-    "@openzeppelin/contracts-ethereum-package": "^3.0.0",
-    "@openzeppelin/upgrades": "^2.8.0",
-    "ganache-cli": "^6.9.1"
+    "ganache-cli": "^6.9.1",
+    "openzeppelin-solidity": "3.1.0"
   }
 }

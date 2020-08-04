@@ -23,7 +23,7 @@ First, clone the repo via git and install dependencies:
 ```bash
 git clone https://github.com/bloxapp/blox-staking-contracts
 cd blox-staking-contracts
-npx oz compile --solc-version 0.6.2 
+truffle compile
 ```
 ## Local test network
 ```bash
@@ -35,7 +35,7 @@ npx ganache-cli --deterministic
 
 
 ```bash
-npx oz deploy
+truffle migrate development
 
 ```
 
@@ -43,7 +43,7 @@ npx oz deploy
 
 
 ```bash
-npx oz send-tx 
+truffle console
 
 ```
 

@@ -1,17 +1,22 @@
 // contracts/BloxStaking.sol
 pragma solidity ^0.6.2;
 
-import "@openzeppelin/upgrades/contracts/Initializable.sol";
-import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/IERC20.sol";
+import 'openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 
-contract BloxStaking is Initializable {
-    IERC20 public cdt_token;
+contract BloxStaking {
+    ERC20 public cdt;
+    uint counter;
 
-    // Initializer function (replaces constructor)
-    function initialize(IERC20 _cdt_token) public initializer {
-        cdt_token = _cdt_token;
+    constructor(ERC20 _cdt) public {
+        cdt = _cdt;
+        counter = 0;
     }
 
-    receive() external payable {
+    function increment() public {
+        counter += 1;
+    }
+
+    function getCount() public returns (uint) {
+        return counter;
     }
 }
