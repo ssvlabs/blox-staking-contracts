@@ -16,7 +16,7 @@ contract BloxStaking {
         counter += 1;
     }
 
-    function getCount() public returns (uint) {
+    function getCount() public view returns (uint) {
         return counter;
     }
 }

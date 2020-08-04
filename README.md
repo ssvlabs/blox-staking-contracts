@@ -44,6 +44,10 @@ truffle migrate development
 
 ```bash
 truffle console
+truffle(development)> let instance = await BloxStaking.deployed()
+truffle(development)> instance.getCount()
+BN { negative: 0, words: [ 0, <1 empty item> ], length: 1, red: null }
+
 
 ```
 
