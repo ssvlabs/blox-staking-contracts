@@ -28,7 +28,9 @@ contract BloxStaking {
         bytes32 deposit_data_root,
         uint256 fee_amount_eth
     ) external payable {
-
+        require(msg.value == (32 ether + fee_amount_eth), "not enough eth to cover deposit and fee");
+        this.validatorDeposit.value(32 ether)(pubkey, withdrawal_credentials, signature, deposit_data_root);
+        this.payFee.value(fee_amount_eth)(fee_amount_eth);
     }
 
     function validatorDeposit(
@@ -37,7 +39,7 @@ contract BloxStaking {
         bytes memory signature,
         bytes32 deposit_data_root
     ) public payable {
-        require(msg.value > 32 ether, "insufficient funds");
+        require(msg.value >= 32 ether, "insufficient funds");
 
         try DepositContract(deposit_contract).deposit.value(32 ether)(pubkey, withdrawal_credentials, signature, deposit_data_root) {
             emit DepositedValidator(pubkey, withdrawal_credentials, 32 ether);

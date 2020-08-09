@@ -16,6 +16,7 @@ npm install -g solc
 npm install -g truffle 
 ```
 
+Download [Genache](https://github.com/trufflesuite/ganache/releases) latests UI
 
 ## Compile
 First, clone the repo via git and install dependencies:
@@ -26,6 +27,7 @@ cd blox-staking-contracts
 truffle compile
 ```
 ## Local test network
+See [Genache quickstart](https://www.trufflesuite.com/docs/ganache/quickstart) for more info
 ```bash
 npx ganache-cli --deterministic
 ```
