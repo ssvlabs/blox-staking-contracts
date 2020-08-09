@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GNU
 // contracts/BloxStaking.sol
 pragma solidity ^0.6.2;
 
@@ -29,8 +30,8 @@ contract BloxStaking {
         uint256 fee_amount_eth
     ) external payable {
         require(msg.value == (32 ether + fee_amount_eth), "not enough eth to cover deposit and fee");
-        this.validatorDeposit.value(32 ether)(pubkey, withdrawal_credentials, signature, deposit_data_root);
-        this.payFee.value(fee_amount_eth)(fee_amount_eth);
+        this.validatorDeposit{value: 32 ether}(pubkey, withdrawal_credentials, signature, deposit_data_root);
+        this.payFee{value:fee_amount_eth}(fee_amount_eth);
     }
 
     function validatorDeposit(
@@ -41,7 +42,7 @@ contract BloxStaking {
     ) public payable {
         require(msg.value >= 32 ether, "insufficient funds");
 
-        try DepositContract(deposit_contract).deposit.value(32 ether)(pubkey, withdrawal_credentials, signature, deposit_data_root) {
+        try DepositContract(deposit_contract).deposit{value: 32 ether}(pubkey, withdrawal_credentials, signature, deposit_data_root) {
             emit DepositedValidator(pubkey, withdrawal_credentials, 32 ether);
         } catch Error(string memory _err) {
             emit DepositFailed(_err);
@@ -53,7 +54,7 @@ contract BloxStaking {
         require(msg.value > 0 ether, "insufficient funds");
         require(fee_amount_eth > 0 ether, "fee can't be 0");
 
-        try TestExchangeFactory(exchange).exchangeCDT.value(fee_amount_eth)(fee_amount_eth) returns (uint256 cdt_bought) {
+        try TestExchangeFactory(exchange).exchangeCDT{value:fee_amount_eth}(fee_amount_eth) returns (uint256 cdt_bought) {
             emit FeePaid(cdt_bought);
         } catch Error(string memory _err) {
             emit FeePurchaseFailed(_err);

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GNU
 // contracts/TestExchangeFactory.sol
 pragma solidity ^0.6.2;
 

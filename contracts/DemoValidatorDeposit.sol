@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GNU
 pragma solidity ^0.6.2;
 
 // This interface is designed to be compatible with the Vyper version.
