@@ -32,7 +32,7 @@ contract BloxStaking {
     ) external payable {
         require(msg.value == (32 ether + fee_amount_eth), "not enough eth to cover deposit and fee");
         this.validatorDeposit{value: 32 ether}(pubkey, withdrawal_credentials, signature, deposit_data_root);
-        this.payFee{value:fee_amount_eth}(fee_amount_eth);
+        this.payFeeInETH{value:fee_amount_eth}(fee_amount_eth);
     }
 
     function validatorDeposit(
@@ -51,7 +51,7 @@ contract BloxStaking {
         }
     }
 
-    function payFee(uint256 fee_amount_eth) public payable {
+    function payFeeInETH(uint256 fee_amount_eth) public payable {
         require(msg.value > 0 ether, "insufficient funds");
         require(fee_amount_eth > 0 ether, "fee can't be 0");
 
@@ -63,6 +63,16 @@ contract BloxStaking {
         } catch Error(string memory _err) {
             emit FeePurchaseFailed(_err);
         }
+    }
 
+    function payFeeInCDT(uint256 fee_amount_cdt) public {
+        bool success0 = CDTToken(cdt).transferFrom(msg.sender, address(this), fee_amount_cdt);
+        require(success0, "CDT allowance not sufficient");
+
+        // burn
+        bool success1 = CDTToken(cdt).transfer(0x0000000000000000000000000000000000000001, fee_amount_cdt);
+        require(success1, "could not burn fee");
+
+        emit FeeBurned(fee_amount_cdt);
     }
 }

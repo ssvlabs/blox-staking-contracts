@@ -11,7 +11,7 @@ module.exports = function(deployer, network, accounts) {
     const from = accounts[0];
     deployer
         .then(function (instance) { // deploy CDT
-            return cdt.new()
+            return deployer.deploy(cdt)
         })
         .then(function (instance) { // deploy exchange
             global.cdtDepoloyed = instance;
