@@ -5,6 +5,7 @@
 
 <div align="center">
 [![Github Tag][github-tag-image]][github-tag-url]
+
 [![Discord](https://discord.com/api/guilds/723834989506068561/widget.png?style=shield)](https://discord.gg/HpT2z5B)
 
 </div>
