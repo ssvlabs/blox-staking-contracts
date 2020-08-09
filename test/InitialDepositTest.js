@@ -3,13 +3,8 @@ const bloxStaking = artifacts.require("BloxStaking");
 const depositContract = artifacts.require("DepositContract");
 
 contract("BloxStaking - initial deposit", async accounts => {
-    it("should get counter", async () => {
-        let instance = await bloxStaking.deployed();
-        let count = await instance.getCount.call();
-        assert.equal(count.valueOf(), 0);
-    });
 
-    it("test simple deposit", async () => {
+    it("test direct deposit", async () => {
         let instance = await bloxStaking.deployed();
 
         const decimals = Web3.utils.toBN(10).pow(Web3.utils.toBN(18));
@@ -25,14 +20,37 @@ contract("BloxStaking - initial deposit", async accounts => {
                 {from: accounts[1], value: value}
             )
             .then(res => {
-                console.log(res);
-                res.receipt.logs.forEach(function(v,i,arr) {
-                    console.log(v);
-                });
+                // console.log(res);
+                // res.receipt.logs.forEach(function(v,i,arr) {
+                //     console.log(v);
+                // });
+            // TODO
             })
             .catch (e => {
                 console.log(e);
+                assert.null(e);
             })
+    });
+
+    it("test fee conversion", async () => {
+        let instance = await bloxStaking.deployed();
+
+        const decimals = Web3.utils.toBN(10).pow(Web3.utils.toBN(18));
+        value = Web3.utils.toBN(32).mul(decimals);
+        fee = Web3.utils.toBN(1).mul(decimals);
+
+        return instance
+            .payFee
+            .sendTransaction(
+                fee,
+                {from: accounts[1], value: value.add(fee)}
+            )
+            .then(res => {
+                assert.equal(res.receipt.logs[0].args.cdt_amount.div(decimals).toString(), 909);
+            })
+            .catch (e => {
+                console.log(e);
+            });
     });
 
 

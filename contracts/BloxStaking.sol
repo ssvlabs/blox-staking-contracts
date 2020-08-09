@@ -3,28 +3,22 @@ pragma solidity ^0.6.2;
 
 import 'openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 import './DemoValidatorDeposit.sol';
+import './TestExchangeFactory.sol';
 
 contract BloxStaking {
     address  public cdt;
     address  public deposit_contract;
-    uint counter;
+    address  public exchange;
 
     event DepositedValidator(bytes pubkey, bytes withdrawal_credentials, uint256 amount);
     event DepositFailed(string error);
-    event FeePaid(bytes pubkey, uint256 cdt_amount);
+    event FeePaid(uint256 cdt_amount);
+    event FeePurchaseFailed(string error);
 
-    constructor(address _cdt, address _deposit_contract) public {
+    constructor(address _cdt, address _exchange, address _deposit_contract) public {
         cdt = _cdt;
         deposit_contract = _deposit_contract;
-        counter = 0;
-    }
-
-    function increment() public {
-        counter += 1;
-    }
-
-    function getCount() public view returns (uint) {
-        return counter;
+        exchange = _exchange;
     }
 
     function depositAndFee(
@@ -54,6 +48,13 @@ contract BloxStaking {
     }
 
     function payFee(uint256 fee_amount_eth) public payable {
+        require(msg.value > 0 ether, "insufficient funds");
+        require(fee_amount_eth > 0 ether, "fee can't be 0");
 
+        try TestExchangeFactory(exchange).exchangeCDT.value(fee_amount_eth)(fee_amount_eth) returns (uint256 cdt_bought) {
+            emit FeePaid(cdt_bought);
+        } catch Error(string memory _err) {
+            emit FeePurchaseFailed(_err);
+        }
     }
 }
