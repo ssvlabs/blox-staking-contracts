@@ -46,8 +46,11 @@ contract TestExchangeFactory {
         uint256 fac = 1000;
         uint256 new_input_token_reserve = this.ethReserve() + eth_amount;
         uint256 new_output_token_reserve = (k_constant * fac)/ new_input_token_reserve;
-        uint256 output_amount = this.cdtReserve() * fac - new_output_token_reserve;
+        uint256 output_amount = (this.cdtReserve() * fac - new_output_token_reserve) / fac;
 
-        return output_amount / fac;
+        bool success = CDTToken(cdt).transfer(msg.sender, output_amount);
+        require(success, "failed to transfer CDT to buyer");
+
+        return output_amount;
     }
 }

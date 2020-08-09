@@ -70,6 +70,14 @@ contract("BloxStaking - initial deposit", async accounts => {
                 {from: accounts[1], value: value.add(fee)}
             )
             .then(res => {
+                // 1: DepositEvent (from the eth deposit contract)
+                // 2: DepositedValidator (BloxStaking)
+                // 3: Transfer (erc20)
+                // 4: Transfer (erc20) burn
+                // 5: FeePaid (BloxStaking)
+                expect(res.receipt.rawLogs).to.have.lengthOf(5);
+
+                // those are just the logs in BloxStaking
                 expect(res.logs).to.have.lengthOf(2);
 
                 // DepositedValidator event
@@ -79,59 +87,15 @@ contract("BloxStaking - initial deposit", async accounts => {
                 expect(event0.args['1']).to.equal('0x00c76a029adcac82fe161b34f44de3c8c94182ffe75bf29a938691ebfd66bf6b'); // withdrawal cred
                 expect(event0.args['2'].toString()).to.equal('32000000000000000000'); // amount
 
-                // FeePaid event
+                // FeeBurned event
                 event1 = res.logs[1];
-                expect(event1.event).to.be.equal('FeePaid');
+                expect(event1.event).to.be.equal('FeeBurned');
                 expect(event1.args['0'].toString()).to.equal('909090909090909090909'); // fee paid in CDT, should be 909 CDT for 1 eth (with 18 decimals)
             })
             .catch (e => {
                 console.log(e);
                 expect(e).to.be.null;
             });
-});
+        });
 
-
-    // it("should call a function that depends on a linked library", async () => {
-    //     let meta = await MetaCoin.deployed();
-    //     let outCoinBalance = await meta.getBalance.call(accounts[0]);
-    //     let metaCoinBalance = outCoinBalance.toNumber();
-    //     let outCoinBalanceEth = await meta.getBalanceInEth.call(accounts[0]);
-    //     let metaCoinEthBalance = outCoinBalanceEth.toNumber();
-    //     assert.equal(metaCoinEthBalance, 2 * metaCoinBalance);
-    // });
-    //
-    // it("should send coin correctly", async () => {
-    //     // Get initial balances of first and second account.
-    //     let account_one = accounts[0];
-    //     let account_two = accounts[1];
-    //
-    //     let amount = 10;
-    //
-    //     let instance = await MetaCoin.deployed();
-    //     let meta = instance;
-    //
-    //     let balance = await meta.getBalance.call(account_one);
-    //     let account_one_starting_balance = balance.toNumber();
-    //
-    //     balance = await meta.getBalance.call(account_two);
-    //     let account_two_starting_balance = balance.toNumber();
-    //     await meta.sendCoin(account_two, amount, { from: account_one });
-    //
-    //     balance = await meta.getBalance.call(account_one);
-    //     let account_one_ending_balance = balance.toNumber();
-    //
-    //     balance = await meta.getBalance.call(account_two);
-    //     let account_two_ending_balance = balance.toNumber();
-    //
-    //     assert.equal(
-    //         account_one_ending_balance,
-    //         account_one_starting_balance - amount,
-    //         "Amount wasn't correctly taken from the sender"
-    //     );
-    //     assert.equal(
-    //         account_two_ending_balance,
-    //         account_two_starting_balance + amount,
-    //         "Amount wasn't correctly sent to the receiver"
-    //     );
-    // });
 });
