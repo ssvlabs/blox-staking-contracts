@@ -1,7 +1,8 @@
-var cdtDepoloyed, exchangeDeployed, depositContract;
+var cdtDeployed, wethDeployed, exchangeDeployed, depositContract;
 
 module.exports = {
-    "cdtDepoloyed": cdtDepoloyed,
+    "cdtDeployed": cdtDeployed,
     "exchangeDeployed": exchangeDeployed,
     "depositContract": depositContract,
+    "wethDeployed": wethDeployed,
 }

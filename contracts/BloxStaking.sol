@@ -4,8 +4,7 @@ pragma solidity ^0.6.2;
 
 import 'openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 import './DemoValidatorDeposit.sol';
-import './TestExchangeFactory.sol';
-import './CDT.sol';
+import './ExchangeRouter.sol';
 
 contract BloxStaking {
     address public cdt;
@@ -67,10 +66,10 @@ contract BloxStaking {
         require(msg.value > 0 ether, "insufficient funds");
         require(fee_amount_eth > 0 ether, "fee can't be 0");
 
-        try TestExchangeFactory(exchange).exchangeCDT{value:fee_amount_eth}(fee_amount_eth) returns (uint256 cdt_bought) {
+        try ExchangeRouter(exchange).exchangeCDT{value:fee_amount_eth}('uniswap',fee_amount_eth) returns (uint256 cdt_bought) {
             // burn
-            bool success = CDTToken(cdt).transfer(0x0000000000000000000000000000000000000001, cdt_bought);
-            require(success, "could not burn fee");
+//            bool success = ERC20(cdt).transfer(0x0000000000000000000000000000000000000001, cdt_bought);
+//            require(success, "could not burn fee");
             emit FeeBurned(cdt_bought);
         } catch Error(string memory _err) {
             emit FeePurchaseFailed(_err);
@@ -78,11 +77,11 @@ contract BloxStaking {
     }
 
     function payFeeInCDT(uint256 fee_amount_cdt) public {
-        bool success0 = CDTToken(cdt).transferFrom(msg.sender, address(this), fee_amount_cdt);
+        bool success0 = ERC20(cdt).transferFrom(msg.sender, address(this), fee_amount_cdt);
         require(success0, "CDT allowance not sufficient");
 
         // burn
-        bool success1 = CDTToken(cdt).transfer(0x0000000000000000000000000000000000000001, fee_amount_cdt);
+        bool success1 = ERC20(cdt).transfer(0x0000000000000000000000000000000000000001, fee_amount_cdt);
         require(success1, "could not burn fee");
 
         emit FeeBurned(fee_amount_cdt);

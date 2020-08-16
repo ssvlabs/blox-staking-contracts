@@ -14,6 +14,8 @@
 brew install node@12
 npm install -g solc 
 npm install -g truffle 
+npm install truffle-flattener -g
+npm install -g remixd
 ```
 
 Download [Genache](https://github.com/trufflesuite/ganache/releases) latests UI
@@ -28,10 +30,21 @@ truffle compile
 ```
 ## Local test network
 See [Genache quickstart](https://www.trufflesuite.com/docs/ganache/quickstart) for more info
-```bash
-npx ganache-cli --deterministic
-```
+1. open an infura account
+2. create an api key for mainnet
+3. run Genache UI
+4. create new workspace
+5. under server, specify 'chain fork'
+6. paste infura URL and set the block number to latest block
 * Not supported for node@14
+
+## debug contract
+We can debug our contracts using remix + remixd.
+Instructions from: https://medium.com/authereum/debugging-solidity-with-a-gui-remix-and-ganache-c6c16488fcfd
+
+(we can use Genache UI instead of the CLI)
+
+We should use the truffle deployment and then copy paste the addresses to Remix
 
 ## Deployment (currently on local testnet)
 
