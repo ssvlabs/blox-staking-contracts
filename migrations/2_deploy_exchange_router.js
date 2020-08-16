@@ -4,12 +4,12 @@ var exchange = artifacts.require("ExchangeRouter");
 
 module.exports = function(deployer, network, accounts) {
     // networkDeployer returns a map of addresses for CDT and exchange router
-    // var networkDeployer;
-    // if (network == "development") {
-    //     networkDeployer = deployDev;
-    // } else {
+    var networkDeployer;
+    if (network == "development") {
+        networkDeployer = deployDev;
+    } else {
         networkDeployer = deployMainnet;
-    // }
+    }
 
     return networkDeployer(deployer, network, accounts)
         .then(addresses => {
@@ -28,15 +28,47 @@ function deployMainnet(deployer, network, accounts) {
     });
 }
 
-// var ERC20 = artifacts.require("openzeppelin-solidity/ERC20")
-// var UniswapV2Factory = artifacts.require("UniswapV2Factory_Dev");
-// // var UniswapV2Router = artifacts.require("@uniswap/v2-periphery/UniswapV2Router02");
-// function deployDev(deployer, network, accounts) {
-//     var ret = {};
-//     return deployer
-//         .deploy(ERC20, "cdt","cdt")
-//         .then(instance => {
-//             ret["cdt"] = instance.address;
-//             return deployer.deploy(UniswapV2Factory, accounts[0]);
-//         })
-// }
+var cdt = artifacts.require("CDTToken")
+var UniswapV2Router = artifacts.require("UniswapV2Router02");
+function deployDev(deployer, network, accounts) {
+    var ret = {};
+    var cdtInstance, uniswapRouterInstance;
+
+    const decimals = Web3.utils.toBN(10).pow(Web3.utils.toBN(18));
+    const initialCDTDepositAmount =  Web3.utils.toBN(10000).mul(decimals); // 10K
+    const initialETHDepositAmount = Web3.utils.toBN(10).mul(decimals); // 10 ETH sets the price to 0.001
+    const from = accounts[0];
+
+
+    return deployer
+        .deploy(cdt)
+        .then(instance => {
+            ret["cdt"] = instance.address;
+            cdtInstance = instance;
+            return deployer.deploy(UniswapV2Router, instance.address);
+        })
+        .then(instance => {
+            ret["uniswapRouter"] = instance.address;
+            uniswapRouterInstance = instance;
+
+            return cdtInstance.approve(uniswapRouterInstance.address, initialCDTDepositAmount); // approve exchange 10K CDT
+        })
+        .then(res => {
+            return uniswapRouterInstance.depositCDT(from, initialCDTDepositAmount); // transfer to exchange CDT
+        })
+        .then(res => {
+            return uniswapRouterInstance.depositETH({value: initialETHDepositAmount}); // transfer to exchange ETH
+        })
+        .then(function (res) { // get cdt reserve
+            return Promise.all([
+                uniswapRouterInstance.cdtReserve(),
+                uniswapRouterInstance.ethReserve()
+            ])
+        })
+        .then(function (res) {
+            console.log("Uniswap CDT reserve: " + res[0].div(decimals).toNumber())
+            console.log("Uniswap ETH reserve: " + res[1].div(decimals).toNumber())
+
+            return ret;
+        })
+}
