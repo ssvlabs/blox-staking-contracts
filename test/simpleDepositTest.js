@@ -31,36 +31,36 @@ contract("BloxStaking - initial deposit", async accounts => {
     //         })
     // });
 
-    it("test fee in ETH", async () => {
-        let instance = await bloxStaking.deployed();
-
-        const decimals = Web3.utils.toBN(10).pow(Web3.utils.toBN(18));
-        value = Web3.utils.toBN(32).mul(decimals);
-        fee = Web3.utils.toBN(1).mul(decimals);
-
-        var res = await instance.payFeeInETH.sendTransaction(
-            fee,
-            {from: accounts[0], value: value.add(fee)}
-        )
-        console.log(res);
-
-        // return instance
-        //     .payFeeInETH
-        //     .sendTransaction(
-        //         fee,
-        //         {from: accounts[0], value: value.add(fee)}
-        //     )
-        //     .then(res => {
-        //         console.log(res.logs[0].args);
-        //         expect(res.logs).to.have.lengthOf(1)
-        //         expect(res.logs[0].event).to.equal("FeeBurned");
-        //         // assert.equal(res.receipt.logs[0].args.cdt_amount.div(decimals).toString(), 909);
-        //     })
-        //     .catch (e => {
-        //         console.log(e);
-        //         // expect(e).to.be.null;
-        //     });
-    });
+    // it("test fee in ETH", async () => {
+    //     let instance = await bloxStaking.deployed();
+    //
+    //     const decimals = Web3.utils.toBN(10).pow(Web3.utils.toBN(18));
+    //     value = Web3.utils.toBN(32).mul(decimals);
+    //     fee = Web3.utils.toBN(1).mul(decimals);
+    //
+    //     var res = await instance.payFeeInETH.sendTransaction(
+    //         fee,
+    //         {from: accounts[0], value: value.add(fee)}
+    //     )
+    //     console.log(res);
+    //
+    //     // return instance
+    //     //     .payFeeInETH
+    //     //     .sendTransaction(
+    //     //         fee,
+    //     //         {from: accounts[0], value: value.add(fee)}
+    //     //     )
+    //     //     .then(res => {
+    //     //         console.log(res.logs[0].args);
+    //     //         expect(res.logs).to.have.lengthOf(1)
+    //     //         expect(res.logs[0].event).to.equal("FeeBurned");
+    //     //         // assert.equal(res.receipt.logs[0].args.cdt_amount.div(decimals).toString(), 909);
+    //     //     })
+    //     //     .catch (e => {
+    //     //         console.log(e);
+    //     //         // expect(e).to.be.null;
+    //     //     });
+    // });
 
     // it("test fee in CDT", async () => {
     //     let staking = await bloxStaking.deployed();
