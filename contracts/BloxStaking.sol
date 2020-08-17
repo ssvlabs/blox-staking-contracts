@@ -3,7 +3,7 @@
 pragma solidity ^0.6.2;
 
 import 'openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
-import './DemoValidatorDeposit.sol';
+import './IDepositContract.sol';
 import './ExchangeRouter.sol';
 
 contract BloxStaking {
@@ -50,7 +50,7 @@ contract BloxStaking {
     ) public payable {
         require(msg.value >= 32 ether, "insufficient funds");
 
-        try DepositContract(deposit_contract).deposit{value: 32 ether}(pubkey, withdrawal_credentials, signature, deposit_data_root) {
+        try IDepositContract(deposit_contract).deposit{value: 32 ether}(pubkey, withdrawal_credentials, signature, deposit_data_root) {
             // update total staked
             total_staked += 32 ether;
 
