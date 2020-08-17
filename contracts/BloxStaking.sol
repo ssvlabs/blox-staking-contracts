@@ -68,8 +68,7 @@ contract BloxStaking {
 
         try ExchangeRouter(exchange).exchangeCDT{value:fee_amount_eth}('uniswap',fee_amount_eth) returns (uint256 cdt_bought) {
             // burn
-//            bool success = ERC20(cdt).transfer(0x0000000000000000000000000000000000000001, cdt_bought);
-//            require(success, "could not burn fee");
+            require(ERC20(cdt).transfer(0x0000000000000000000000000000000000000001, cdt_bought), "could not burn fee");
             emit FeeBurned(cdt_bought);
         } catch Error(string memory _err) {
             emit FeePurchaseFailed(_err);
