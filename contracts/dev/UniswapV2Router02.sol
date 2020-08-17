@@ -9,6 +9,7 @@ import 'openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 // Not all methods are implemented, just what BloxStaking needs.
 contract UniswapV2Router02 is IUniswapV2Router02 {
     address  public cdt;
+    address public immutable override WETH;
 
     uint256 private reserveCDT;
     uint256 private reserveETH;
@@ -21,8 +22,9 @@ contract UniswapV2Router02 is IUniswapV2Router02 {
         _;
     }
 
-    constructor(address _cdt) public {
+    constructor(address _cdt, address _weth) public {
         cdt = _cdt;
+        WETH = _weth;
         k_constant = 10000*10**18 * 10*10**18;
     }
 
@@ -53,14 +55,16 @@ contract UniswapV2Router02 is IUniswapV2Router02 {
     ensure(deadline)
     returns (uint[] memory amounts)
     {
-        require(msg.value > 0, "eth value can't be 0");
+        require(path[0] == this.WETH(), 'UniswapV2Router: INVALID_PATH');
 
         uint256 fac = 1000;
         uint256 new_input_token_reserve = this.ethReserve() + msg.value;
         uint256 new_output_token_reserve = (k_constant * fac)/ new_input_token_reserve;
         uint256 output_amount = (this.cdtReserve() * fac - new_output_token_reserve) / fac;
 
-        require(ERC20(cdt).transfer(to, output_amount), "failed to transfer");
+        require(amountOutMin <= output_amount, 'UniswapV2Router: INSUFFICIENT_OUTPUT_AMOUNT');
+
+        require(ERC20(path[1] /* suppose to be CDT */).transfer(to, output_amount), 'UniswapV2: TRANSFER_FAILED');
 
         uint[] memory ret = new uint[](2);
         ret[0] = msg.value;
@@ -75,132 +79,131 @@ contract UniswapV2Router02 is IUniswapV2Router02 {
     //
     ///////////////////////
     function removeLiquidityETHSupportingFeeOnTransferTokens(
-        address token,
-        uint liquidity,
-        uint amountTokenMin,
-        uint amountETHMin,
-        address to,
-        uint deadline
+        address ,
+        uint ,
+        uint ,
+        uint ,
+        address ,
+        uint
     ) external override returns (uint amountETH) {return 0;}
     function removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(
-        address token,
-        uint liquidity,
-        uint amountTokenMin,
-        uint amountETHMin,
-        address to,
-        uint deadline,
-        bool approveMax, uint8 v, bytes32 r, bytes32 s
+        address ,
+        uint ,
+        uint ,
+        uint ,
+        address ,
+        uint ,
+        bool , uint8 , bytes32 , bytes32
     ) external override returns (uint amountETH){return 0;}
 
     function swapExactTokensForTokensSupportingFeeOnTransferTokens(
-        uint amountIn,
-        uint amountOutMin,
-        address[] calldata path,
-        address to,
-        uint deadline
+        uint ,
+        uint ,
+        address[] calldata ,
+        address ,
+        uint
     ) override external {}
     function swapExactETHForTokensSupportingFeeOnTransferTokens(
-        uint amountOutMin,
-        address[] calldata path,
-        address to,
-        uint deadline
+        uint ,
+        address[] calldata ,
+        address ,
+        uint
     ) override external payable {}
     function swapExactTokensForETHSupportingFeeOnTransferTokens(
-        uint amountIn,
-        uint amountOutMin,
-        address[] calldata path,
-        address to,
-        uint deadline
+        uint ,
+        uint ,
+        address[] calldata ,
+        address ,
+        uint
     ) override  external {}
     function factory() override external pure returns (address) { return address(0);}
-    function WETH() override external pure returns (address){ return address(0);}
 
     function addLiquidity(
-        address tokenA,
-        address tokenB,
-        uint amountADesired,
-        uint amountBDesired,
-        uint amountAMin,
-        uint amountBMin,
-        address to,
-        uint deadline
+        address ,
+        address ,
+        uint ,
+        uint ,
+        uint ,
+        uint ,
+        address ,
+        uint
     ) override external returns (uint amountA, uint amountB, uint liquidity) {return (0,0,0);}
     function addLiquidityETH(
-        address token,
-        uint amountTokenDesired,
-        uint amountTokenMin,
-        uint amountETHMin,
-        address to,
-        uint deadline
+        address ,
+        uint ,
+        uint ,
+        uint ,
+        address ,
+        uint
     ) override external payable returns (uint amountToken, uint amountETH, uint liquidity) {return (0,0,0);}
     function removeLiquidity(
-        address tokenA,
-        address tokenB,
-        uint liquidity,
-        uint amountAMin,
-        uint amountBMin,
-        address to,
-        uint deadline
+        address ,
+        address ,
+        uint ,
+        uint ,
+        uint ,
+        address ,
+        uint
     ) override external returns (uint amountA, uint amountB) {return (0,0);}
     function removeLiquidityETH(
-        address token,
-        uint liquidity,
-        uint amountTokenMin,
-        uint amountETHMin,
-        address to,
-        uint deadline
+        address ,
+        uint ,
+        uint ,
+        uint ,
+        address ,
+        uint
     ) override external returns (uint amountToken, uint amountETH) {return (0,0);}
     function removeLiquidityWithPermit(
-        address tokenA,
-        address tokenB,
-        uint liquidity,
-        uint amountAMin,
-        uint amountBMin,
-        address to,
-        uint deadline,
-        bool approveMax, uint8 v, bytes32 r, bytes32 s
+        address ,
+        address ,
+        uint ,
+        uint ,
+        uint ,
+        address ,
+        uint ,
+        bool , uint8 , bytes32 , bytes32
     ) override external returns (uint amountA, uint amountB) {return (0,0);}
     function removeLiquidityETHWithPermit(
-        address token,
-        uint liquidity,
-        uint amountTokenMin,
-        uint amountETHMin,
-        address to,
-        uint deadline,
-        bool approveMax, uint8 v, bytes32 r, bytes32 s
+        address ,
+        uint ,
+        uint ,
+        uint ,
+        address ,
+        uint ,
+        bool , uint8 , bytes32 , bytes32
     ) override external returns (uint amountToken, uint amountETH) {return (0,0);}
     function swapExactTokensForTokens(
-        uint amountIn,
-        uint amountOutMin,
-        address[] calldata path,
-        address to,
-        uint deadline
+        uint ,
+        uint ,
+        address[] calldata ,
+        address ,
+        uint
     ) override external returns (uint[] memory amounts) {}
     function swapTokensForExactTokens(
-        uint amountOut,
-        uint amountInMax,
-        address[] calldata path,
-        address to,
-        uint deadline
+        uint ,
+        uint ,
+        address[] calldata ,
+        address ,
+        uint
     ) override external returns (uint[] memory amounts) {}
-    function swapTokensForExactETH(uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline)
+    function swapTokensForExactETH(uint , uint , address[] calldata , address to, uint )
     override
     external
     returns (uint[] memory amounts){}
-    function swapExactTokensForETH(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)
+    function swapExactTokensForETH(uint , uint , address[] calldata , address , uint )
     override
     external
     returns (uint[] memory amounts){}
-    function swapETHForExactTokens(uint amountOut, address[] calldata path, address to, uint deadline)
+    function swapETHForExactTokens(uint , address[] calldata , address , uint )
     override
     external
     payable
-    returns (uint[] memory amounts){}
+    returns (uint[] memory ){}
 
-    function quote(uint amountA, uint reserveA, uint reserveB) override external pure returns (uint amountB) {return 0;}
-    function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut) override external pure returns (uint amountOut)  {return 0;}
-    function getAmountIn(uint amountOut, uint reserveIn, uint reserveOut) override external pure returns (uint amountIn)  {return 0;}
-    function getAmountsOut(uint amountIn, address[] calldata path) override external view returns (uint[] memory amounts)  {}
-    function getAmountsIn(uint amountOut, address[] calldata path) override external view returns (uint[] memory amounts) {}
+    function quote(uint , uint , uint ) override external pure returns (uint amountB) {return 0;}
+    function getAmountOut(uint , uint , uint ) override external pure returns (uint amountOut)  {return 0;}
+    function getAmountIn(uint , uint , uint ) override external pure returns (uint amountIn)  {return 0;}
+    function getAmountsOut(uint , address[] calldata ) override external view returns (uint[] memory amounts)  {}
+    function getAmountsIn(uint , address[] calldata ) override external view returns (uint[] memory amounts) {}
 
 }

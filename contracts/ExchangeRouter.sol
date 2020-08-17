@@ -39,6 +39,8 @@ contract ExchangeRouter {
     }
 
     function exchangeCDTUniswap(uint256 eth_amount) internal returns(uint256 cdt_bought) {
+        require(msg.value >= eth_amount, "insufficient funds");
+
         address weth = IUniswapV2Router02(uniswap_router).WETH();
 
         address[] memory path = new address[](2);

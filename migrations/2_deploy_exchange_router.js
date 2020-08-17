@@ -28,7 +28,7 @@ function deployMainnet(deployer, network, accounts) {
     });
 }
 
-var cdt = artifacts.require("CDTToken")
+var cdt = artifacts.require("CDTToken");
 var UniswapV2Router = artifacts.require("UniswapV2Router02");
 function deployDev(deployer, network, accounts) {
     var ret = {};
@@ -45,7 +45,7 @@ function deployDev(deployer, network, accounts) {
         .then(instance => {
             ret["cdt"] = instance.address;
             cdtInstance = instance;
-            return deployer.deploy(UniswapV2Router, instance.address);
+            return deployer.deploy(UniswapV2Router, instance.address, "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2" /* WETH */);
         })
         .then(instance => {
             ret["uniswapRouter"] = instance.address;
