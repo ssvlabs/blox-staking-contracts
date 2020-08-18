@@ -8,6 +8,8 @@ import 'openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 // this is a DEV only contract that simulates IUniswapV2Router02 for testing.
 // Not all methods are implemented, just what BloxStaking needs.
 contract UniswapV2Router02 is IUniswapV2Router02 {
+    using SafeMath for uint256;
+
     address  public cdt;
     address public immutable override WETH;
 
@@ -58,17 +60,17 @@ contract UniswapV2Router02 is IUniswapV2Router02 {
         require(path[0] == this.WETH(), 'UniswapV2Router: INVALID_PATH');
 
         uint256 fac = 1000;
-        uint256 new_input_token_reserve = this.ethReserve() + msg.value;
-        uint256 new_output_token_reserve = (k_constant * fac)/ new_input_token_reserve;
-        uint256 output_amount = (this.cdtReserve() * fac - new_output_token_reserve) / fac;
+        uint256 newInputTokenReserve = this.ethReserve().add(msg.value);
+        uint256 newOutputTokenReserve = (k_constant.mul(fac)).div(newInputTokenReserve);
+        uint256 outputAmount = (this.cdtReserve().mul(fac).sub(newOutputTokenReserve)).div(fac);
 
-        require(amountOutMin <= output_amount, 'UniswapV2Router: INSUFFICIENT_OUTPUT_AMOUNT');
+        require(amountOutMin <= outputAmount, 'UniswapV2Router: INSUFFICIENT_OUTPUT_AMOUNT');
 
-        require(ERC20(path[1] /* suppose to be CDT */).transfer(to, output_amount), 'UniswapV2: TRANSFER_FAILED');
+        require(ERC20(path[1] /* suppose to be CDT */).transfer(to, outputAmount), 'UniswapV2: TRANSFER_FAILED');
 
         uint[] memory ret = new uint[](2);
         ret[0] = msg.value;
-        ret[1] = output_amount;
+        ret[1] = outputAmount;
         return ret;
     }
 
