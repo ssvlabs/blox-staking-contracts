@@ -10,6 +10,7 @@ contract BloxStaking {
     address public cdt;
     address public depositContract;
     address public exchange;
+    address constant public BURN_ADDRESS = 0x0000000000000000000000000000000000000001;
 
     uint256 internal totalStaked;
 
@@ -58,7 +59,7 @@ contract BloxStaking {
         require(feeAmountETH > 0 ether, "fee can't be 0");
 
         uint256 cdtBought = ExchangeRouter(exchange).exchangeCDT{value:feeAmountETH}('uniswap',feeAmountETH);
-        require(ERC20(cdt).transfer(0x0000000000000000000000000000000000000001, cdtBought), "could not burn fee");
+        require(ERC20(cdt).transfer(BURN_ADDRESS, cdtBought), "could not burn fee");
         emit FeeBurned(cdtBought);
     }
 
@@ -67,7 +68,7 @@ contract BloxStaking {
         require(success0, "CDT allowance not sufficient");
 
         // burn
-        bool success1 = ERC20(cdt).transfer(0x0000000000000000000000000000000000000001, feeAmountCDT);
+        bool success1 = ERC20(cdt).transfer(BURN_ADDRESS, feeAmountCDT);
         require(success1, "could not burn fee");
 
         emit FeeBurned(feeAmountCDT);
