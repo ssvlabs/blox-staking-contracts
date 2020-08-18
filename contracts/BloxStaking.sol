@@ -14,9 +14,7 @@ contract BloxStaking {
     uint256 internal totalStaked;
 
     event DepositedValidator(bytes pubkey, bytes withdrawalCredentials, uint256 amount, uint256 updatedTotalStaked);
-    event DepositFailed(string error);
     event FeeBurned(uint256 cdt_amount);
-    event FeePurchaseFailed(string error);
 
     constructor(address _cdt, address _exchange, address _depositContract) public {
         cdt = _cdt;
@@ -50,29 +48,18 @@ contract BloxStaking {
     ) public payable {
         require(msg.value >= 32 ether, "insufficient funds");
 
-        try IDepositContract(depositContract).deposit{value: 32 ether}(pubkey, withdrawal_credentials, signature, deposit_data_root) {
-            // update total staked
-            totalStaked += 32 ether;
-
-            emit DepositedValidator(pubkey, withdrawal_credentials, 32 ether, totalStaked);
-        } catch Error(string memory _err) {
-            emit DepositFailed(_err);
-            return;
-        }
-
+        IDepositContract(depositContract).deposit{value: 32 ether}(pubkey, withdrawal_credentials, signature, deposit_data_root);
+        totalStaked += 32 ether;
+        emit DepositedValidator(pubkey, withdrawal_credentials, 32 ether, totalStaked);
     }
 
     function payFeeInETH(uint256 feeAmountETH) public payable {
         require(msg.value > 0 ether, "insufficient funds");
         require(feeAmountETH > 0 ether, "fee can't be 0");
 
-        try ExchangeRouter(exchange).exchangeCDT{value:feeAmountETH}('uniswap',feeAmountETH) returns (uint256 cdtBought) {
-            // burn
-            require(ERC20(cdt).transfer(0x0000000000000000000000000000000000000001, cdtBought), "could not burn fee");
-            emit FeeBurned(cdtBought);
-        } catch Error(string memory _err) {
-            emit FeePurchaseFailed(_err);
-        }
+        uint256 cdtBought = ExchangeRouter(exchange).exchangeCDT{value:feeAmountETH}('uniswap',feeAmountETH);
+        require(ERC20(cdt).transfer(0x0000000000000000000000000000000000000001, cdtBought), "could not burn fee");
+        emit FeeBurned(cdtBought);
     }
 
     function payFeeInCDT(uint256 feeAmountCDT) public {
