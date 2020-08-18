@@ -102,4 +102,8 @@ module.exports = {
       // }
     },
   },
+  plugins: [
+      // "truffle-plugin-solhint",
+      // "truffle-security",
+  ]
 };

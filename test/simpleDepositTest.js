@@ -18,7 +18,7 @@ contract("BloxStaking - initial deposit", async accounts => {
                 web3.utils.hexToBytes("0x00c76a029adcac82fe161b34f44de3c8c94182ffe75bf29a938691ebfd66bf6b"),
                 web3.utils.hexToBytes("0x88ff6c5a44b85db96b684cee772506489ae388838fe4d13435bf415de23ce14a9b4f254dd1f456cffbb581d87f4a6ce806f559e8d1afa28cdbde84a5fba6526e9f948ddde7166d8ba8218478e5e681833492d61a7b49d11ced0718ac317218df"),
                 web3.utils.hexToBytes("0x6255505dc4c2ba5828cc6ad8f47bd122f02d8c840fc1aa81abd817f3971c2d79"),
-                {from: accounts[1], value: value}
+                {from: accounts[0], value: value}
             )
             .then(res => {
                 // console.log(res);
@@ -108,7 +108,7 @@ contract("BloxStaking - initial deposit", async accounts => {
                 web3.utils.hexToBytes("0x88ff6c5a44b85db96b684cee772506489ae388838fe4d13435bf415de23ce14a9b4f254dd1f456cffbb581d87f4a6ce806f559e8d1afa28cdbde84a5fba6526e9f948ddde7166d8ba8218478e5e681833492d61a7b49d11ced0718ac317218df"),
                 web3.utils.hexToBytes("0x6255505dc4c2ba5828cc6ad8f47bd122f02d8c840fc1aa81abd817f3971c2d79"),
                 fee,
-                {from: accounts[1], value: value.add(fee)}
+                {from: accounts[0], value: value.add(fee)}
             )
             .then(res => {
                 // 1: DepositEvent (from the eth deposit contract)
@@ -156,7 +156,7 @@ contract("BloxStaking - initial deposit", async accounts => {
                 web3.utils.hexToBytes("0x88ff6c5a44b85db96b684cee772506489ae388838fe4d13435bf415de23ce14a9b4f254dd1f456cffbb581d87f4a6ce806f559e8d1afa28cdbde84a5fba6526e9f948ddde7166d8ba8218478e5e681833492d61a7b49d11ced0718ac317218df"),
                 web3.utils.hexToBytes("0x6255505dc4c2ba5828cc6ad8f47bd122f02d8c840fc1aa81abd817f3971c2d79"),
                 fee,
-                {from: accounts[1], value: value.add(fee)}
+                {from: accounts[0], value: value.add(fee)}
             )
             .then(res => {
                 // DepositedValidator event
@@ -171,7 +171,7 @@ contract("BloxStaking - initial deposit", async accounts => {
                         web3.utils.hexToBytes("0x88ff6c5a44b85db96b684cee772506489ae388838fe4d13435bf415de23ce14a9b4f254dd1f456cffbb581d87f4a6ce806f559e8d1afa28cdbde84a5fba6526e9f948ddde7166d8ba8218478e5e681833492d61a7b49d11ced0718ac317218df"),
                         web3.utils.hexToBytes("0x6255505dc4c2ba5828cc6ad8f47bd122f02d8c840fc1aa81abd817f3971c2d79"),
                         fee,
-                        {from: accounts[1], value: value.add(fee)}
+                        {from: accounts[0], value: value.add(fee)}
                     )
             })
             .then(res => {

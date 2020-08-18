@@ -6,15 +6,14 @@ import 'openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 import 'openzeppelin-solidity/contracts/access/Ownable.sol';
 
 contract CDTToken is Ownable, ERC20 {
+    using SafeMath for uint256;
 
-    uint256 CAP = 1000000000; // 1B
-    uint256 TOTALSUPPLY = CAP.mul(10 ** 18);
+    uint256 internal cap = 1000000000; // 1B
 
     constructor()
     public
     ERC20('CDT', 'CDT')
-    Ownable()
-    {
-        _mint(msg.sender, TOTALSUPPLY);
+    Ownable() {
+        _mint(msg.sender, cap.mul(10 ** 18));
     }
 }
