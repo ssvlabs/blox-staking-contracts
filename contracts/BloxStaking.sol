@@ -36,7 +36,8 @@ contract BloxStaking {
         bytes32 deposit_data_root,
         uint256 fee_amount_eth
     ) external payable {
-        require(msg.value == (32 ether + fee_amount_eth), "not enough eth to cover deposit and fee");
+        require(msg.value == (32 ether + fee_amount_eth), "not enough/ too much eth to cover deposit and fee");
+
         this.validatorDeposit{value: 32 ether}(pubkey, withdrawal_credentials, signature, deposit_data_root);
         this.payFeeInETH{value:fee_amount_eth}(fee_amount_eth);
     }
@@ -47,7 +48,7 @@ contract BloxStaking {
         bytes memory signature,
         bytes32 deposit_data_root
     ) public payable {
-        require(msg.value >= 32 ether, "insufficient funds");
+        require(msg.value == 32 ether, "validator deposit should be exactly 32 eth");
 
         IDepositContract(depositContract).deposit{value: 32 ether}(pubkey, withdrawal_credentials, signature, deposit_data_root);
         totalStaked += 32 ether;
@@ -68,9 +69,7 @@ contract BloxStaking {
         require(success0, "CDT allowance not sufficient");
 
         // burn
-        bool success1 = ERC20(cdt).transfer(BURN_ADDRESS, feeAmountCDT);
-        require(success1, "could not burn fee");
-
+        require(ERC20(cdt).transfer(BURN_ADDRESS, feeAmountCDT), "could not burn fee");
         emit FeeBurned(feeAmountCDT);
     }
 }
