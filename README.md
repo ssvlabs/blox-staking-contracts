@@ -69,7 +69,7 @@ truffle migrate development
 ```bash
 truffle console
 truffle(development)> let instance = await BloxStaking.deployed()
-truffle(development)> instance.getTotalStaked(()
+truffle(development)> instance.getTotalStaked()
 BN { negative: 0, words: [ 0, <1 empty item> ], length: 1, red: null }
 
 ```
