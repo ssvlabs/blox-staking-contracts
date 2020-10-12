@@ -3,12 +3,12 @@ const bloxStaking = artifacts.require("BloxStaking");
 var cdtContract = artifacts.require("CDTToken");
 
 contract("Fee testing", async accounts => {
-    it("test fee in ETH", async () => {
+    it("test fee in ETH - success", async () => {
         let instance = await bloxStaking.deployed();
 
         const decimals = Web3.utils.toBN(10).pow(Web3.utils.toBN(18));
-        value = Web3.utils.toBN(32).mul(decimals);
-        fee = Web3.utils.toBN(1).mul(decimals);
+        const value = Web3.utils.toBN(32).mul(decimals);
+        const fee = Web3.utils.toBN(1).mul(decimals);
 
         return instance
             .payFeeInETH
@@ -27,12 +27,30 @@ contract("Fee testing", async accounts => {
             });
     });
 
+    it("test fee in ETH - rejects with zero fee", async () => {
+        let instance = await bloxStaking.deployed();
+
+        const decimals = Web3.utils.toBN(10).pow(Web3.utils.toBN(18));
+        const value = Web3.utils.toBN(32).mul(decimals);
+        const fee = Web3.utils.toBN(0).mul(decimals);
+
+        return instance
+            .payFeeInETH
+            .sendTransaction(
+                fee,
+                {from: accounts[0], value: value.add(fee)}
+            ).catch (e => {
+                expect(e).to.be.instanceOf(Error);
+                expect(e.toString()).to.have.string("fee can't be 0");
+            });
+    });
+
     it("test fee in CDT", async () => {
         let staking = await bloxStaking.deployed();
         let cdt = await cdtContract.deployed();
 
         const decimals = Web3.utils.toBN(10).pow(Web3.utils.toBN(18));
-        fee = Web3.utils.toBN(50).mul(decimals);
+        const fee = Web3.utils.toBN(50).mul(decimals);
 
         return cdt
             .approve(staking.address, fee, {from: accounts[0]})
