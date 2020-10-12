@@ -47,16 +47,26 @@ See [Genache quickstart](https://www.trufflesuite.com/docs/ganache/quickstart) f
 3. Go to **`Server`** tab, and enable **`Chain forking`**. After that there will be two more inputs related to fork.
 4. Paste infura URL copied in p.3 above into **`ENTER CUSTOM URL`** input.
 5. Go to [https://etherscan.io/blocks](https://etherscan.io/blocks), copy the latest block number, and paste that into **`BLOCK NUMBER`** input.
+6. Go to `SERVER` tab and set port `8545`.
 
 * Not supported for node@14
 
 ## Debug contract
+
 We can debug our contracts using remix + remixd.
 Instructions from: https://medium.com/authereum/debugging-solidity-with-a-gui-remix-and-ganache-c6c16488fcfd
 
 (we can use Genache UI instead of the CLI)
 
-We should use the truffle deployment and then copy paste the addresses to Remix
+We should use the truffle deployment and then copy paste the addresses to Remix.
+
+#### Enable CONTRACTS tab in Genache UI
+
+- Go to `CONTRACTS` tab in Genache UI.
+- Click `ADD PROJECT` button and chose `truffle-config.js` in the root of the project.
+- Reload the workspace.
+
+Now you can see all your contracts under this tab.
 
 ## Deployment (currently on local testnet)
 
