@@ -51,16 +51,7 @@ See [Genache quickstart](https://www.trufflesuite.com/docs/ganache/quickstart) f
 
 * Not supported for node@14
 
-## Debug contract
-
-We can debug our contracts using remix + remixd.
-Instructions from: https://medium.com/authereum/debugging-solidity-with-a-gui-remix-and-ganache-c6c16488fcfd
-
-(we can use Genache UI instead of the CLI)
-
-We should use the truffle deployment and then copy paste the addresses to Remix.
-
-#### Enable CONTRACTS tab in Genache UI
+#### Enable CONTRACTS tab in Ganache UI
 
 - Go to `CONTRACTS` tab in Genache UI.
 - Click `ADD PROJECT` button and chose `truffle-config.js` in the root of the project.
@@ -83,6 +74,59 @@ truffle(development)> instance.getTotalStaked()
 BN { negative: 0, words: [ 0, <1 empty item> ], length: 1, red: null }
 
 ```
+
+## Debug contract
+
+We can debug our contracts using remix + remixd.
+Instructions from: https://medium.com/authereum/debugging-solidity-with-a-gui-remix-and-ganache-c6c16488fcfd
+
+*NOTE: Run the remox-ide locally using docker. See instruction there https://github.com/ethereum/remix-ide#docker.*
+
+(we can use Genache UI instead of the CLI)
+
+We should use the truffle deployment and then copy paste the addresses to Remix.
+
+### Produce a first transaction
+
+This is the description how to produce a transaction to the BloxStaking smart contract. 
+
+Once the `remix-ide` is started and `REMIXD` plugin is enabled, contracts are ready to be deployed.
+
+Deploy smart contract first:
+
+- Find and open `BloxStaking` smart contract in the file explorers tab of remix-ide page.
+- Compile this smart contract to make sure it's valid.
+- Open `Deploy & run transactions` tab in remix-ide.
+- Chose `Web3 Provider` option in the `ENVIRONMENT` input.
+- Chose account with enough ETH amount on its balance. 
+- Chose `BloxStaking` contract in the `CONTRACT` tab.
+- Open `BloxStaking` contract in `CONTRACTS` tab of Ganache UI.
+- Copy CDT, Exchange, and Deposit Contract values from Ganache UI to remix-ide fields under the deployment button.
+- Click `transact` button.
+
+Make validator deposit transaction to the deployed contract:
+
+- Open `Deploy & run transactions` tab in remix-ide.
+- Under `Deployed Contracts` section chose the deployed `BloxStaking` smart contract.
+- Open `validatorDeposit` section in the list of contract's actions.
+- Fill the required fields to make a deposit: `pubkey`, `withdrawal_credentials`, `signature`, and `deposit_data_root`.
+- Click `transact` button.
+
+### Connect MetaMask plugin to local Ganache network
+
+This requires the installed MetaMask plugin in a browser.
+
+- Open MetaMask plugin
+- Open the networks list and chose `Custom RPC` option.
+- Specify network name, e.g. `My Local Network`.
+- Specify the Ganache network RPC address, it should be `http://127.0.0.1:8545`.
+- Open `ACCOUNTS` tab in Ganache UI.
+- Chose an account that should be liked to MetaMask wallet, and click on "key" icon.
+- Copy private key of the selected account.
+- Go to MetaMask plugin and open the import account screen.
+- Paste the copied private key in the MetaMask input.
+- Save the account.
+
 
 ## License
 

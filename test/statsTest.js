@@ -2,13 +2,12 @@ const Web3 = require('web3');
 const bloxStaking = artifacts.require("BloxStaking");
 
 contract("Stats testing", async accounts => {
-
     it("test total staked updated", async () => {
         let instance = await bloxStaking.deployed();
 
         const decimals = Web3.utils.toBN(10).pow(Web3.utils.toBN(18));
-        value = Web3.utils.toBN(32).mul(decimals);
-        fee = Web3.utils.toBN(1).mul(decimals);
+        const value = Web3.utils.toBN(32).mul(decimals);
+        const fee = Web3.utils.toBN(1).mul(decimals);
 
         return instance
             .depositAndFee
@@ -45,5 +44,5 @@ contract("Stats testing", async accounts => {
                     console.log(e);
                 expect(e).to.be.null;
             });
-});
+    });
 });
