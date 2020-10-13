@@ -29,10 +29,10 @@ Test stage Docker image:
   tags:
     - blox-infra-stage 
   script:
-    - add-apt-repository ppa:ethereum/ethereum -y
-    - apt-get update
-    - apt-get install build-essential -y
-    - apt-get install gcc g++ libssl-dev libudev-dev pkg-config
+#    - add-apt-repository ppa:ethereum/ethereum -y
+#    - apt-get update
+#    - apt-get install build-essential -y
+#    - apt-get install gcc g++ libssl-dev libudev-dev pkg-config
     - node --version
     - npm install
     - npm install -g ganache-cli truffle
