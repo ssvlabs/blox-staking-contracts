@@ -1,5 +1,5 @@
 stages:
-  - build
+  - test
 
 variables:
 
@@ -22,12 +22,10 @@ variables:
 
 
 #blox-infra-stage
-Build stage Docker image:
-  stage: build
+Test stage Docker image:
+  image: xenial
+  stage: test
   tags:
     - blox-infra-stage 
   script:
     - echo test
-
-  only:
-    - master
