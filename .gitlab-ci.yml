@@ -1,5 +1,7 @@
+image: node:12-buster-slim
+
 stages:
-  - build
+  - test
 
 variables:
 
@@ -22,12 +24,18 @@ variables:
 
 
 #blox-infra-stage
-Build stage Docker image:
-  stage: build
+Test stage Docker image:
+  stage: test
   tags:
     - blox-infra-stage 
   script:
-    - echo test
-
-  only:
-    - master
+    - node --version
+    - npm install
+    - npm install -g --unsafe-perm=true --allow-root ganache-cli truffle
+    - set -e
+    - ganache-cli --gasLimit 30000000 2> /dev/null 1> /dev/null &
+    - sleep 5 # to make sure ganache-cli is up and running before compiling
+    - rm -rf build
+    - truffle compile
+    - truffle migrate --reset --network development
+    - truffle test
