@@ -35,4 +35,4 @@ Test stage Docker image:
 #    - apt-get install gcc g++ libssl-dev libudev-dev pkg-config
     - node --version
     - npm install
-    - npm install -g ganache-cli truffle
+    - npm install -g --unsafe-perm=true --allow-root ganache-cli truffle
