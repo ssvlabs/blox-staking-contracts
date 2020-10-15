@@ -2,11 +2,12 @@
 // contracts/BloxStaking.sol
 pragma solidity ^0.6.2;
 
+import "@openzeppelin/upgrades/contracts/Initializable.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "./IDepositContract.sol";
 import "./ExchangeRouter.sol";
 
-contract BloxStaking {
+contract BloxStaking is Initializable {
     address public cdt;
     address public depositContract;
     address public exchange;
@@ -17,7 +18,7 @@ contract BloxStaking {
     event DepositedValidator(bytes pubkey, bytes withdrawalCredentials, uint256 amount, uint256 updatedTotalStaked);
     event FeeBurned(uint256 cdt_amount);
 
-    constructor(address _cdt, address _exchange, address _depositContract) public {
+    function initialize(address _cdt, address _exchange, address _depositContract) public initializer {
         cdt = _cdt;
         depositContract = _depositContract;
         exchange = _exchange;

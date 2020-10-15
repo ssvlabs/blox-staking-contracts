@@ -54,7 +54,15 @@ module.exports = {
      provider: function() {
       return new HDWalletProvider(teamsMnemonic, "https://sandbox.truffleteams.com/25f8a0ed-79be-451e-b7af-b31b863f262e", 0, 10, false);
      },
-     network_id: "*",
+     network_id: "5",
+    },
+    goerli: {
+      provider: function() {
+          return new HDWalletProvider("leader appear chef anchor job oblige tool present lucky once put crime","https://goerli.infura.io/v3/3fc48ed4dc844a049c3286c3dbe074fe");
+      },
+      network_id: 5,
+      gas: 4500000,
+      gasPrice: 10000000000,
     }
     // Another network with more advanced options...
     // advanced: {
