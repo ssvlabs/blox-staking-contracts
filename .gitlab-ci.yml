@@ -29,6 +29,7 @@ Test stage Docker image:
   tags:
     - blox-infra-stage 
   script:
+    - apt-get update
     - apt-get install -y git
     - git --version
     - node --version
