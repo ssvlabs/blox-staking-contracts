@@ -35,7 +35,7 @@ truffle compile
 
 See [Genache quickstart](https://www.trufflesuite.com/docs/ganache/quickstart) for more info
 
-#### 1. Unfura account
+#### 1. Infura account
 
 1. Create an [infura account](https://infura.io/)
 2. Create a new [Ethereum project](https://infura.io/dashboard/ethereum) with API keys for the Mainnet.
@@ -86,6 +86,11 @@ Instructions from: https://medium.com/authereum/debugging-solidity-with-a-gui-re
 
 We should use the truffle deployment and then copy paste the addresses to Remix.
 
+```bash
+$ docker pull remixproject/remix-ide:latest
+$ docker run --network="host" -p 80:80 remixproject/remix-ide:latest
+```
+
 ### Produce a first transaction
 
 This is the description how to produce a transaction to the BloxStaking smart contract. 
@@ -127,6 +132,20 @@ This requires the installed MetaMask plugin in a browser.
 - Paste the copied private key in the MetaMask input.
 - Save the account.
 
+## Smart contracts
+
+**IMPORTANT: Anyone who develops upgradable smart contracts must read all articles from there https://docs.openzeppelin.com/upgrades-plugins/1.x/**
+
+Smart contracts is the entity in blockchain similar with wallets. 
+From the developer perspective, it looks like a class in a programming. It may have functions, variables, etc.
+
+Smart contract doesn't have a private key, but can receive payments, and can handle that.
+
+Smart contract balance stores in the blockchain, and that info can be stored in local variables of a smart contract as well, like with classes in Java.
+
+Smart contracts should be upgradable. More information can be found there:
+- https://docs.openzeppelin.com/upgrades-plugins/1.x/writing-upgradeable
+- https://docs.openzeppelin.com/upgrades-plugins/1.x/proxies
 
 ## License
 
