@@ -56,14 +56,14 @@ module.exports = {
      },
      network_id: "5",
     },
-    goerli: {
+   /* goerli: {
       provider: function() {
-          return new HDWalletProvider("leader appear chef anchor job oblige tool present lucky once put crime","https://goerli.infura.io/v3/3fc48ed4dc844a049c3286c3dbe074fe");
+          return new HDWalletProvider(teamsMnemonic,"https://goerli.infura.io/v3/<secret>");
       },
       network_id: 5,
       gas: 4500000,
       gasPrice: 10000000000,
-    }
+    }*/
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port

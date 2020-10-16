@@ -74,5 +74,5 @@ async function main() {
     console.log("BloxStakingV2 upgraded to:", bloxStakingAddress);
 }
 
-main();
-// console.warn("initial deployment script is not implemented!")
+// main();
+console.warn("initial deployment script is not implemented!")
