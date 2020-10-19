@@ -29,6 +29,9 @@ Test stage Docker image:
   tags:
     - blox-infra-stage 
   script:
+    - apt-get update
+    - apt-get install -y git
+    - git --version
     - node --version
     - npm install
     - npm install -g --unsafe-perm=true --allow-root ganache-cli truffle

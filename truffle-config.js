@@ -52,10 +52,18 @@ module.exports = {
     },
     teams: {
      provider: function() {
-      return new HDWalletProvider("number struggle brief catch slot property unusual major kit they rocket negative", "https://sandbox.truffleteams.com/748ba8ee-8d16-49f2-9e98-bfb674e3b21a\t", 0, 10, false);
+      return new HDWalletProvider(teamsMnemonic, "https://sandbox.truffleteams.com/25f8a0ed-79be-451e-b7af-b31b863f262e", 0, 10, false);
      },
      network_id: "5",
-    }
+    },
+   /* goerli: {
+      provider: function() {
+          return new HDWalletProvider(teamsMnemonic,"https://goerli.infura.io/v3/<secret>");
+      },
+      network_id: 5,
+      gas: 4500000,
+      gasPrice: 10000000000,
+    }*/
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port
